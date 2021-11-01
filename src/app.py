@@ -21,6 +21,7 @@ class App:
         self.cell_height = maze_height//rows
         self.walls = []
         self.coins = []
+        self.superCoins = []
         self.enemies = []
         self.enemy_position = []
         self.player_position = None
@@ -138,6 +139,9 @@ class App:
                     elif char == 'P':
                         self.player_position = [x_index, y_index]
                         grid[y_index][x_index] = 'P'
+                    elif char == 'S':
+                        self.superCoins.append(vec(x_index, y_index))
+                        grid[y_index][x_index] = 'S'
                     elif char == '2':
                         self.enemy_position.append([x_index, y_index])
                         grid[y_index][x_index] = 2
@@ -161,6 +165,9 @@ class App:
 
         for coin in self.coins:
             pygame.draw.circle(self.screen, yellow, (int(coin.x*self.cell_width + self.cell_width//2 + top_bottom_buffer//2), int(coin.y*self.cell_height + self.cell_height//2 + top_bottom_buffer//2)), coin_radius)
+ 
+        for coin in self.superCoins:
+            pygame.draw.circle(self.screen, yellow, (int(coin.x*self.cell_width + self.cell_width//2 + top_bottom_buffer//2), int(coin.y*self.cell_height + self.cell_height//2 + top_bottom_buffer//2)), coin_radius + 2)
 
     def draw_coins(self):
 
@@ -340,9 +347,12 @@ class App:
         self.player.lives = 3
         self.player.current_score = 0
         self.coins = []
+        self.superCoins = []
         self.player.grid_position = vec(self.player.starting_position)
         self.player.pixel_position = self.player.get_pixel_position()
         self.player.direction *= 0
+        self.player.isAngry = False
+        self.player.speed = 1
         for enemy in self.enemies:
             enemy.grid_position = vec(enemy.starting_position)
             enemy.pixel_position = enemy.get_pixel_position()
@@ -354,6 +364,8 @@ class App:
                         self.walls.append(vec(x_index, y_index))
                     elif char == 'C':
                         self.coins.append(vec(x_index, y_index))
+                    elif char == 'S':
+                        self.superCoins.append(vec(x_index, y_index))
         
         self.state = 'playing'
 

@@ -16,9 +16,9 @@ class Enemy:
         self.starting_position = [position.x, position.y]
         self.radius = 10
         self.number = index
+        self.personality = 'ucs'
         self.colour = self.set_colour()
         self.direction = vec(0, 0)
-        self.personality = 'default'
         self.best_route = None
 
     def get_pixel_position(self):
@@ -47,8 +47,6 @@ class Enemy:
     def move(self):
         if self.personality == 'random':
             self.direction = self.get_random_direction()
-        elif self.personality == 'default':
-            self.direction = vec(0, 0)
         else:
             self.direction = self.get_path_direction()
 
@@ -211,14 +209,11 @@ class Enemy:
         pygame.draw.circle(self.app.screen, self.colour, (int(self.pixel_position.x), int(self.pixel_position.y)), self.radius)
 
     def set_colour(self):
-        if self.number == 0:
-            return white
-        elif self.number == 1:
+        if self.personality == 'ucs':
             return red
-        elif self.number == 2:
-            return blue
-        elif self.number == 3:
-            return grey
+        elif self.personality == 'random':
+            return white
 
     def change_personality(self, personality):
         self.personality = personality
+        self.colour = self.set_colour()
